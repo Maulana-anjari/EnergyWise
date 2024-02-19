@@ -7,4 +7,4 @@ Ketua Kelompok:
 
 Anggota 1: 
 
-Anggota 2: 
+Anggota 2: Raffid Aditya Hermawan - 21/482635/TK/53331
