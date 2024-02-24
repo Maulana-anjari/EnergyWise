@@ -23,12 +23,13 @@ Pemborosan energi di gedung perkantoran menjadi perhatian utama, karena tidak ha
 Aplikasi berbasis web yang bernama Energy Wise untuk manajemen energi cerdas pada bangunan perkantoran.
 
 ## 🧩 Rancangan Fitur
-| Fitur | Keterangan |
-| ----- | ---------- |
-| Memonitor penggunaan energi di setiap ruangan gedung secara real-time | Menyajikan data suhu, pencahayaan, dan penggunaan energi secara real-time. Grafik dinamis untuk memvisualisasikan perubahan dalam kondisi gedung. |
-| Laporan kinerja untuk membantu pengelola gedung membuat keputusan yang lebih baik | Menyediakan pengguna laporan yang terperinci tentang konsumsi energi dan operasional gedung. |
-| Memprediksi konsumsi energi | Memprediksi konsumsi energi berdasarkan history penggunaan dan kondisi gedung (IoT) untuk mengoptimalkan operasi gedung, termasuk pengaturan suhu dan pencahayaan, agar sesuai dengan kebutuhan pengguna dan tujuan efisiensi energi. Adaptasi terhadap perubahan kebutuhan gedung, cuaca, dan kondisi fisik lainnya dengan menyesuaikan pengaturan energi secara prediktif. |
-| Rekomendasi solusi pemborosan energi | Mengidentifikasi dan mengklasifikasikan pola pemborosan di gedung, serta memberikan rekomendasi penghematan energi, misalnya misalnya dengan mengatur waktu penggunaan perangkat elektronik. Identifikasi dan analisis pola penggunaan perangkat elektronik untuk memberikan saran tentang perangkat mana yang dapat dimatikan atau diatur ulang untuk penghematan energi. |
+
+| No. | Fitur | Keterangan |
+| --- | ----- | ---------- |
+|1| Memonitor penggunaan energi di setiap ruangan gedung secara real-time | Menyajikan data suhu, pencahayaan, dan penggunaan energi secara real-time. Grafik dinamis untuk memvisualisasikan perubahan dalam kondisi gedung. |
+|2| Laporan kinerja untuk membantu pengelola gedung membuat keputusan yang lebih baik | Menyediakan pengguna laporan yang terperinci tentang konsumsi energi dan operasional gedung. |
+|3| Memprediksi konsumsi energi | Memprediksi konsumsi energi berdasarkan history penggunaan dan kondisi gedung (IoT) untuk mengoptimalkan operasi gedung, termasuk pengaturan suhu dan pencahayaan, agar sesuai dengan kebutuhan pengguna dan tujuan efisiensi energi. Adaptasi terhadap perubahan kebutuhan gedung, cuaca, dan kondisi fisik lainnya dengan menyesuaikan pengaturan energi secara prediktif. |
+|4| Rekomendasi solusi pemborosan energi | Mengidentifikasi dan mengklasifikasikan pola pemborosan di gedung, serta memberikan rekomendasi penghematan energi, misalnya misalnya dengan mengatur waktu penggunaan perangkat elektronik. Identifikasi dan analisis pola penggunaan perangkat elektronik untuk memberikan saran tentang perangkat mana yang dapat dimatikan atau diatur ulang untuk penghematan energi. |
 
 ## 📈 Analisis Kompetitor
 
