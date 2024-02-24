@@ -34,6 +34,7 @@ Aplikasi berbasis web yang bernama Energy Wise untuk manajemen energi cerdas pad
 ## 📈 Analisis Kompetitor
 
 1. KOMPETITOR 1
+   
    | Keypoint | Value |
    | --- | --- |
    | Nama | Schneider Electric: EcoStruxure Building Operation |
@@ -44,6 +45,7 @@ Aplikasi berbasis web yang bernama Energy Wise untuk manajemen energi cerdas pad
    | Kekurangan | Kompleksitas implementasi. Biaya yang cukup mahal mengingat ditujukan untuk enterprise building. Gangguan jaringan atau masalah teknis dapat mempengaruhi operasional sistem. |
    | Key Competitive Advantage & Unique Value | Biaya yang relatif lebih murah. Dukungan pelanggan yang lebih baik. Menawarkan tingkat kustomisasi yang lebih tinggi. Kontrol perangkat yang lebih fleksibel. |
 2. KOMPETITOR 2
+   
    | Keypoint | Value |
    | --- | --- |
    | Nama | Siemens: Desigo CC |
@@ -54,6 +56,7 @@ Aplikasi berbasis web yang bernama Energy Wise untuk manajemen energi cerdas pad
    | Kekurangan | Kompleksitas implementasi. Biaya yang cukup mahal. Gangguan jaringan atau masalah teknis dapat mempengaruhi operasional sistem. |
    | Key Competitive Advantage & Unique Value | Biaya yang relatif lebih murah. Dukungan pelanggan yang lebih baik. Menawarkan tingkat kustomisasi yang lebih tinggi. Kontrol perangkat yang lebih fleksibel. |
 3. KOMPETITOR 3
+   
    | Keypoint | Value |
    | --- | --- |
    | Nama | Honeywell: Building Management System (BMS) |
@@ -62,6 +65,4 @@ Aplikasi berbasis web yang bernama Energy Wise untuk manajemen energi cerdas pad
    | Target Customer | Gedung komersial, industri manufaktur |
    | Kelebihan | Kemudahan penggunaan. Kontrol total bangunan. Skalabilitas. Keterbukaan. Optimasi energi. |
    | Kekurangan | Kompleksitas implementasi. Biaya yang cukup mahal. Gangguan jaringan atau masalah teknis dapat mempengaruhi operasional sistem. |
-   | Key Competitive Advantage & Unique Value | Biaya yang relatif lebih murah
-- Dukungan pelanggan yang lebih baik
-- Menawarkan tingkat kustomisasi yang lebih tinggi. Kontrol perangkat yang lebih fleksibel. |
+   | Key Competitive Advantage & Unique Value | Biaya yang relatif lebih murah. Dukungan pelanggan yang lebih baik. Menawarkan tingkat kustomisasi yang lebih tinggi. Kontrol perangkat yang lebih fleksibel. |
