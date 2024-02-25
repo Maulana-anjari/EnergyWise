@@ -1,5 +1,4 @@
 # Kelompok 11 (ProJoy)
-## Project Senior Project TI
 
 | Nama | NIM | Peran |
 | ---- | --- | ----- |
@@ -66,3 +65,39 @@ Aplikasi berbasis web yang bernama Energy Wise untuk manajemen energi cerdas pad
    | Kelebihan | Kemudahan penggunaan. Kontrol total bangunan. Skalabilitas. Keterbukaan. Optimasi energi. |
    | Kekurangan | Kompleksitas implementasi. Biaya yang cukup mahal. Gangguan jaringan atau masalah teknis dapat mempengaruhi operasional sistem. |
    | Key Competitive Advantage & Unique Value | Biaya yang relatif lebih murah. Dukungan pelanggan yang lebih baik. Menawarkan tingkat kustomisasi yang lebih tinggi. Kontrol perangkat yang lebih fleksibel. |
+
+
+## Metodologi SDLC yang digunakan: Agile
+Alasan memilih SDLC Agile karena lebih fleksibel terhadap perubahan, komunikasi yang lebih terbuka antar anggota tim pengembang, dan memungkinkan produk untuk lebih responsif terhadap perubahan.
+
+## Perancangan Tahap 1-3 SDLC
+
+### Tujuan dari produk
+Produk bertujuan untuk membantu perkantoran mengelola penggunaan energi mereka secara lebih efisien dengan memberikan informasi yang akurat tentang konsumsi energi di setiap ruangan gedung, laporan tentang konsumsi energi dan operasional gedung, prediksi konsumsi energi berikutnya, dan rekomendasi solusi pemborosan energi.
+
+### Pengguna potensial dari produk dan kebutuhan para pengguna
+Manajer gedung perkantoran atau perusahaan yang ingin mengelola konsumsi energi mereka secara lebih efisien.
+
+### Use Case Diagram
+![Use case diagram](usecase.png)
+
+### Functional requirements untuk use case yang telah dirancang
+
+| FR | Deskripsi |
+| --- | --- |
+| Monitoring konsumsi energi | Sistem dapat memantau penggunaan energi di setiap ruangan gedung secara real-time. Informasi tentang penggunaan energi harus disajikan dengan jelas dan dapat diakses oleh pengguna. |
+| Prediksi konsumsi energi | Sistem dapat menganalisis data historis penggunaan energi dan faktor-faktor lainnya untuk memprediksi konsumsi energi di masa depan. Prediksi akurat dan dapat diandalkan untuk membantu manajer gedung atau administrator dalam perencanaan penggunaan energi. |
+| Pelaporan tentang konsumsi energi dan operasional gedung | Sistem menyediakan fitur pelaporan yang memungkinkan administrator untuk melihat data penggunaan energi secara historis, tren, operasional gedung, dan informasi lainnya. |
+| Rekomendasi solusi pemborosan energi | Sistem dapat memberikan rekomendasi kepada administrator dan pengguna tentang cara mengurangi pemborosan energi berdasarkan analisis data dan pola. |
+| Integrasi dengan perangkat IoT | Sistem dapat berkomunikasi dengan perangkat IoT yang terpasang di gedung untuk mengumpulkan data tentang penggunaan energi dan kondisi lingkungan. |
+| Notifikasi dan pemberitahuan | Sistem dapat mengirimkan notifikasi atau pemberitahuan kepada pengguna tentang peristiwa penting, seperti perubahan signifikan dalam konsumsi energi atau penggunaan energi telah melewati batas wajar. |
+| Manajemen pengguna | Sistem memiliki fungsionalitas untuk mengelola pengguna yang berbeda, seperti administrator atau manajer gedung dan penghuni gedung. |
+
+### Entity Relationship Diagram
+![Entity Relationship Diagram](ERD.png)
+
+### Low-fidelity Wireframe
+
+
+### Gantt-Chart pengerjaan proyek dalam kurun waktu 1 semester
+![gantt chart](gantt-chart.png)
