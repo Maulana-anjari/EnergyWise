@@ -98,6 +98,16 @@ Manajer gedung perkantoran atau perusahaan yang ingin mengelola konsumsi energi 
 
 ### Low-fidelity Wireframe
 
+1. Halaman Dashboard
+   ![Halaman Dashboard](dashboard.png)
+2. Halaman Laporan
+   ![Halaman Laporan](laporan.png)
+3. Halaman Monitor IoT
+   ![Halaman Monitor IoT](monitoriot.png)
+4. Halaman Rekomendasi
+   ![Halaman Rekomendasi](rekomendasi.png)
+5. Halaman Profil
+   ![Halaman Profil](profil.png)
 
 ### Gantt-Chart pengerjaan proyek dalam kurun waktu 1 semester
 ![gantt chart](gantt-chart.png)
