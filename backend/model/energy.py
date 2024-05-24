@@ -1,1 +1,1 @@
-import backend.model.config as config
+import backend.model as model
