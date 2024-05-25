@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import os
-from controller import user
+from controller import user, energy
 
 app = Flask(__name__)
 
@@ -40,6 +40,33 @@ def login():
         return jsonify({'message': response})
     except Exception as e:
         return jsonify({'error': str(e)})
-        
+    
+
+@app.route('/api/energy/usage', methods=['GET'])
+def get_energy_usage_month():    
+    month = request.args.get('month')
+    print(month)
+    if not month:
+        return jsonify({'error': 'Month Parameter is Required'})
+    try: 
+        energy_usage_month = energy.monitor_energy_usage_month(month)
+        response = []
+        for row in energy_usage_month:
+            response.append({
+                "data_id": row[0],
+                "device_id": row[1],
+                "timestamp": row[2],
+                "energy_consumption": row[3],
+                "room_id": row[4],
+                "device_type": row[5],
+                "status": row[6],
+                "room_name": row[7],
+                "floor": row[8],
+                "area": row[9]
+            })
+        return jsonify({'energy_usage_month': response})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('APP_PORT'))
