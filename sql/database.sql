@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS public.energy_usage_data
     data_id serial NOT NULL,
     device_id integer NOT NULL,
     "timestamp" timestamp with time zone,
-    energy_comsumption double precision NOT NULL,
+    energy_consumption double precision NOT NULL,
     PRIMARY KEY (data_id)
 );
 
