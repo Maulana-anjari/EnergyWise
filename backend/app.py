@@ -8,6 +8,7 @@ app = Flask(__name__)
 def info():
     return 'Server is Running on port ' + os.getenv('APP_PORT')
 
+#USER SECTION
 @app.route('/api/users/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -40,32 +41,78 @@ def login():
         return jsonify({'message': response})
     except Exception as e:
         return jsonify({'error': str(e)})
-    
 
+
+#ENERGY SECTION
 @app.route('/api/energy/usage', methods=['GET'])
-def get_energy_usage_month():    
-    month = request.args.get('month')
-    if not month:
-        return jsonify({'error': 'Month Parameter is Required'})
+def get_energy_usage():
+    type = request.args.get('type')
+    
+    if type == 'all':
+        return get_all_energy_usage()
+    elif type == 'month':
+        month = request.args.get('month')
+        return get_energy_usage_month(month)
+    elif type == 'device':
+        device_id = request.args.get('device_id')
+        return get_energy_usage_device(device_id)
+    elif type == 'month and device':
+        month = request.args.get('month')
+        device_id = request.args.get('device_id')
+        return get_energy_usage_month_and_device(month, device_id)
+    else:
+        return jsonify({'error': 'Invalid request type'})
+
+def get_all_energy_usage():    
     try: 
-        energy_usage_month = energy.monitor_energy_usage_month(month)
-        response = []
-        for row in energy_usage_month:
-            response.append({
-                "data_id": row[0],
-                "device_id": row[1],
-                "timestamp": row[2].strftime('%d %m %Y %H:%M:%S GMT'),
-                "energy_consumption": row[3],
-                "room_id": row[4],
-                "device_type": row[5],
-                "status": row[6],
-                "room_name": row[7],
-                "floor": row[8],
-                "area": row[9]
-            })
-        return jsonify({'energy_usage_month': response})
+        energy_usage = energy.monitor_all_energy_usage()
+        return jsonify({'energy_usage': format_energy_usage(energy_usage)})
     except Exception as e:
         return jsonify({'error': str(e)})
 
+def get_energy_usage_month(month):    
+    if not month:
+        return jsonify({'error': 'Month Parameter is Required'})
+    try: 
+        energy_usage_month = energy.monitor_energy_usage_by_month(month)
+        return jsonify({'energy_usage_month': format_energy_usage(energy_usage_month)})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+def get_energy_usage_device(device_id):    
+    if not device_id:
+        return jsonify({'error': 'Device ID Parameter is Required'})
+    try: 
+        energy_usage_device = energy.monitor_energy_usage_by_device_id(device_id)
+        return jsonify({'energy_usage_device': format_energy_usage(energy_usage_device)})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+def get_energy_usage_month_and_device(month, device_id):    
+    if not month and device_id:
+        return jsonify({'error': 'Device ID and Month Parameter is Required'})
+    try: 
+        energy_usage_month_and_device = energy.monitor_energy_usage_by_month_and_device_id(month, device_id)
+        return jsonify({'energy_usage_device': format_energy_usage(energy_usage_month_and_device)})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+def format_energy_usage(energy_usage):
+    response = []
+    for row in energy_usage:
+        response.append({
+            "data_id": row[0],
+            "device_id": row[1],
+            "timestamp": row[2].strftime('%d %m %Y %H:%M:%S GMT'),
+            "energy_consumption": row[3],
+            "room_id": row[4],
+            "device_type": row[5],
+            "status": row[6],
+            "room_name": row[7],
+            "floor": row[8],
+            "area": row[9]
+        })
+    return response
+    
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('APP_PORT'))
