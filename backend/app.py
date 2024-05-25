@@ -45,7 +45,6 @@ def login():
 @app.route('/api/energy/usage', methods=['GET'])
 def get_energy_usage_month():    
     month = request.args.get('month')
-    print(month)
     if not month:
         return jsonify({'error': 'Month Parameter is Required'})
     try: 
@@ -55,7 +54,7 @@ def get_energy_usage_month():
             response.append({
                 "data_id": row[0],
                 "device_id": row[1],
-                "timestamp": row[2],
+                "timestamp": row[2].strftime('%d %m %Y %H:%M:%S GMT'),
                 "energy_consumption": row[3],
                 "room_id": row[4],
                 "device_type": row[5],
