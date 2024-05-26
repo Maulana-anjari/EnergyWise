@@ -1,9 +1,12 @@
 from model import db_params
 import psycopg2
+import bcrypt
 
 def insert_user(username, email, password): 
     conn = psycopg2.connect(**db_params)
     cursor = conn.cursor()
+
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     col_name = "username, email, password"
     table_name = "users"
@@ -11,7 +14,7 @@ def insert_user(username, email, password):
     query = "INSERT INTO {} ({}) VALUES (%s, %s, %s)"
     query = query.format(table_name, col_name)
     try:
-        cursor.execute(query, (username, email, password))
+        cursor.execute(query, (username, email, hashed_password))
         conn.commit()
         return "Successfully Registered"
     except Exception as e:
