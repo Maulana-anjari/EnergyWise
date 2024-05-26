@@ -6,6 +6,11 @@ import pmdarima as pm
 from datetime import datetime
 from fpdf import FPDF
 import calendar 
+import numpy as np
+from tensorflow.keras.models import load_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+from sklearn.preprocessing import MinMaxScaler
 
 def monitor_all_energy_usage():
     try:
@@ -62,25 +67,33 @@ def monitor_total_energy_usage_by_month(month):
         return str(e)
 
 #Forecasting Section
-MODEL_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "EnergyWise", "arima_models"))
+MODEL_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "EnergyWise", "lstm_models"))
 
-def load_latest_arima_model():
+def load_latest_lstm_model():
     models = os.listdir(MODEL_DIRECTORY)
     if models:
         latest_model = max(models)
-        with open(os.path.join(MODEL_DIRECTORY, latest_model), "rb") as f:
-            return pickle.load(f)
+        model = load_model(os.path.join(MODEL_DIRECTORY, latest_model))
+        model.compile(optimizer='adam', loss='mean_squared_error')  # Recompile the model
+        return model
     else:
         return None
-    
-def save_arima_model(model, timestamp):
-    model_name = f"arima_model_{timestamp}.pkl"
-    with open(os.path.join(MODEL_DIRECTORY, model_name), "wb") as f:
-        pickle.dump(model, f)
 
-def ARIMA_model():
+def save_lstm_model(model, timestamp):
+    model_name = f"lstm_model_{timestamp}.h5"
+    model.save(os.path.join(MODEL_DIRECTORY, model_name))
+
+def create_lstm_model(input_shape):
+    model = Sequential()
+    model.add(LSTM(units=50, return_sequences=True, input_shape=input_shape))
+    model.add(LSTM(units=50))
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    return model
+
+def LSTM_model():
     try:
-        model = load_latest_arima_model()
+        model = load_latest_lstm_model()
         
         energy_data = energy.get_total_energy_by_hour() 
         if not energy_data: 
@@ -90,18 +103,45 @@ def ARIMA_model():
         df['timestamp'] = pd.to_datetime(df['timestamp'])
         df.set_index('timestamp', inplace=True)
         
+        dataset = df['energy_consumption'].values.reshape(-1, 1)
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(dataset)
+        
+        X_train = []
+        y_train = []
+        for i in range(60, len(scaled_data)):
+            X_train.append(scaled_data[i-60:i, 0])
+            y_train.append(scaled_data[i, 0])
+        
+        X_train, y_train = np.array(X_train), np.array(y_train)
+        X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+        
         if model is None:
-            model = pm.auto_arima(df['energy_consumption'], trace=True, error_action='ignore', suppress_warnings=True)
-        fitted_model = model.fit(df['energy_consumption'])
-
+            model = create_lstm_model((X_train.shape[1], 1))
+        
+        model.fit(X_train, y_train, epochs=10, batch_size=32, verbose=2)
+        
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        save_arima_model(fitted_model, timestamp=timestamp)
-
-        forecast = fitted_model.predict(n_periods=24)
-        return forecast
+        save_lstm_model(model, timestamp=timestamp)
+        
+        # Forecasting for the next 24 hours
+        inputs = df['energy_consumption'][-60:].values.reshape(-1, 1)
+        inputs = scaler.transform(inputs)
+        X_test = inputs.reshape(1, inputs.shape[0], 1)
+        
+        forecast = []
+        for _ in range(24):
+            prediction = model.predict(X_test)
+            forecast.append(prediction[0, 0])
+            # Update X_test with the new prediction, ensuring consistent dimensions
+            X_test = np.append(X_test[:, 1:, :], np.reshape(prediction, (1, 1, 1)), axis=1)
+        
+        forecast = scaler.inverse_transform(np.array(forecast).reshape(-1, 1)).flatten().tolist()  # Convert to list of native floats
+        
+        return forecast, df.index[-1]  # Return the forecast and the last timestamp
     except Exception as e:
-        return str(e)
-    
+        return str(e), None
+
 #Report Section
 def get_report(month):
     data = energy.get_total_energy_by_month(month)
