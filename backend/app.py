@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 import os
 from controller import user, energy
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 
 app = Flask(__name__)
@@ -143,17 +143,17 @@ def get_total_energy_usage():
 @app.route('/api/energy/forecast', methods=['GET'])
 def forecast():
     try:
-        forecast = energy.ARIMA_model()
+        forecast, last_timestamp = energy.LSTM_model()
         if isinstance(forecast, str):
             return jsonify({'error': forecast})
         
-        timestamps = pd.date_range(start=datetime.now(), periods=24, freq='H')
+        timestamps = pd.date_range(start=last_timestamp + timedelta(hours=1), periods=24, freq='H')
         
         response = []
         for i in range(24):
             response.append({
                 "timestamp": timestamps[i].strftime('%Y-%m-%d %H:%M:%S'),
-                "energy_consumption": forecast[i]
+                "energy_consumption": float(forecast[i])  # Ensure JSON serializable
             })
         return jsonify({"forecast": response})
     except Exception as e:
