@@ -11,7 +11,7 @@ export default function SideNav() {
         className="mb-2 flex h-20 items-center justify-start rounded-md bg-green-900 p-4 md:h-40"
         href="/"
       >
-        <div className="w-20 text-white md:w-20">
+        <div className="w-30 text-white md:w-20">
           <EnergyWiseLogo />
         </div>
       </Link>
@@ -24,7 +24,7 @@ export default function SideNav() {
             await signOut();
           }}
         >
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-green-500 hover:text-green-100 md:flex-none md:justify-start md:p-2 md:px-3">
+          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-green-700 hover:text-green-100 md:flex-none md:justify-start md:p-2 md:px-3">
             <PowerIcon className="w-6" />
             <div className="hidden md:block">Sign Out</div>
           </button>
