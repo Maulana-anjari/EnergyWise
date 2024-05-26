@@ -113,6 +113,29 @@ def format_energy_usage(energy_usage):
             "area": row[9]
         })
     return response
+
+@app.route('/api/energy/usage/total', methods=['GET'])
+def get_total_energy_usage():
+    try:
+        month = request.args.get('month')
+        total_energy_usage = None
+
+        if month:
+            total_energy_usage = energy.monitor_total_energy_usage_by_month(month)
+        else:
+            total_energy_usage = energy.monitor_total_energy_usage()
+        
+        response = []
+        for row in total_energy_usage:
+            response.append({
+                "timestamp": row[0].strftime('%d %m %Y'),
+                "energy_consumption": row[1]
+            })
+        return jsonify({"total_energy_usage": response})
+    except Exception as e:
+        return jsonify(str(e))
+
     
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('APP_PORT'))
