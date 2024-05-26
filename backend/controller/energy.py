@@ -39,3 +39,17 @@ def monitor_energy_usage_by_month_and_device_id(month, device_id):
             return "Data Not Available"
     except Exception as e:
         return str(e)
+    
+def monitor_total_energy_usage():
+    try: 
+        total_energy_usage = energy.get_total_energy()
+        return total_energy_usage if total_energy_usage else "Data Not Available"
+    except Exception as e:
+        return str(e)
+    
+def monitor_total_energy_usage_by_month(month):
+    try: 
+        total_energy_usage = energy.get_total_energy_by_month(month)
+        return total_energy_usage if total_energy_usage else "Data Not Available"
+    except Exception as e:
+        return str(e)
