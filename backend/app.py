@@ -1,6 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import os
 from controller import user, energy
+from datetime import datetime
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -14,34 +16,36 @@ def register():
     data = request.get_json()
 
     if 'username' not in data or 'email' not in data or 'password' not in data:
-        return jsonify({'error': 'Username, Email and Password are Required'})
+        return jsonify({'error': 'Username, Email, and Password are required'}), 400
 
     username = data['username']
     email = data['email']
     password = data['password']
 
     try:
-        response = user.register(username, email, password)
-        return jsonify({'message': response})
+        response, status_code = user.register(username, email, password)
+        if status_code == 201:
+            return jsonify({'message': response}), status_code
+        else:
+            return jsonify({'error': response}), status_code
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/users/login', methods=['POST'])
 def login():
     data = request.get_json()
 
-    if 'username_or_email' not in data or 'password' not in data:
-        return jsonify({'error': 'Fill the Field Correctly'})
-    
+    if not data or 'username_or_email' not in data or 'password' not in data:
+        return jsonify({'error': 'Please provide both username/email and password'}), 400
+
     username_or_email = data['username_or_email']
     password = data['password']
 
-    try:
-        response = user.login(username_or_email, password)
-        return jsonify({'message': response})
-    except Exception as e:
-        return jsonify({'error': str(e)})
-
+    response, status_code = user.login(username_or_email, password)
+    if status_code == 200:
+        return jsonify({'message': response}), status_code
+    else:
+        return jsonify({'error': response}), status_code
 
 #ENERGY SECTION
 @app.route('/api/energy/usage', methods=['GET'])
@@ -103,7 +107,7 @@ def format_energy_usage(energy_usage):
         response.append({
             "data_id": row[0],
             "device_id": row[1],
-            "timestamp": row[2].strftime('%d %m %Y %H:%M:%S GMT'),
+            "timestamp": row[2].strftime('%d-%m-%Y %H:%M:%S GMT'),
             "energy_consumption": row[3],
             "room_id": row[4],
             "device_type": row[5],
@@ -128,14 +132,52 @@ def get_total_energy_usage():
         response = []
         for row in total_energy_usage:
             response.append({
-                "timestamp": row[0].strftime('%d %m %Y'),
+                "timestamp": row[0].strftime('%d-%m-%Y'),
                 "energy_consumption": row[1]
             })
         return jsonify({"total_energy_usage": response})
     except Exception as e:
         return jsonify(str(e))
 
-    
+# #Forecast Section
+@app.route('/api/energy/forecast', methods=['GET'])
+def forecast():
+    try:
+        forecast = energy.ARIMA_model()
+        if isinstance(forecast, str):
+            return jsonify({'error': forecast})
+        
+        timestamps = pd.date_range(start=datetime.now(), periods=24, freq='H')
+        
+        response = []
+        for i in range(24):
+            response.append({
+                "timestamp": timestamps[i].strftime('%Y-%m-%d %H:%M:%S'),
+                "energy_consumption": forecast[i]
+            })
+        return jsonify({"forecast": response})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+#Report Section
+@app.route('/api/energy/report', methods=['GET'])
+def report():
+    try:
+        month = request.args.get('month')
+        if not month:
+            return jsonify({"error": "Month is required"}), 400
+
+        data = energy.get_report(month)
+        if data is None:
+            return jsonify({"error": "No data found for the specified month"}), 404
+        
+        pdf_path = energy.create_pdf(data, month)
+        if not pdf_path:
+            return jsonify({"error": "Failed to create PDF"}), 500
+
+        return send_file(pdf_path, as_attachment=True)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('APP_PORT'))

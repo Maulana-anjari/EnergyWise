@@ -180,19 +180,33 @@ def get_total_energy_by_month(month):
     return result
 
 
+def get_total_energy_by_hour():
+    conn = psycopg2.connect(**db_params)
+    cursor = conn.cursor()
 
-"""
-SELECT 
-    DATE_TRUNC('hour', eud.timestamp) AS timestamp_hour,
-    SUM(eud.energy_consumption) AS total_energy_consumption
-FROM
-    public.energy_usage_data eud
-JOIN
-    public.iot_device id ON eud.device_id = id.device_id
-JOIN
-    public.room r ON id.room_id = r.room_id
-GROUP BY
-    timestamp_hour
-ORDER BY
-    timestamp_hour;
-"""
+    query ="""
+        SELECT 
+            DATE_TRUNC('hour', eud.timestamp) AS timestamp_hour,
+            SUM(eud.energy_consumption) AS total_energy_consumption
+        FROM
+            public.energy_usage_data eud
+        JOIN
+            public.iot_device id ON eud.device_id = id.device_id
+        JOIN
+            public.room r ON id.room_id = r.room_id
+        GROUP BY
+            timestamp_hour
+        ORDER BY
+            timestamp_hour;
+    """
+
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        conn.commit()
+    except Exception as e:
+        return str(e)
+    finally:
+        cursor.close()
+        conn.close()
+    return result
