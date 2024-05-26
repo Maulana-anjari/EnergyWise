@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.users
     user_id bigserial NOT NULL,
     username character varying(64) NOT NULL,
     email character varying(100) NOT NULL,
-    password character varying(20) NOT NULL,
+    password character varying(255) NOT NULL,
     role character varying DEFAULT 'user',
     PRIMARY KEY (user_id)
 );

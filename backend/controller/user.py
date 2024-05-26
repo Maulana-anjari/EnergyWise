@@ -1,4 +1,5 @@
 from model import  user
+import bcrypt
 
 def register(username, email, password):
     try:
@@ -16,7 +17,7 @@ def login(username_or_email, password):
         get_user = user.get_user(username_or_email)
         if get_user:
             stored_password = get_user[-1]
-            if stored_password == password:
+            if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
                 return "User logged in"
             else:
                 return "Password Incorrect"
