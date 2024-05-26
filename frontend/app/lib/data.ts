@@ -7,25 +7,172 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
+  EnergyUsage,
+  Consumption
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+const backend_url = process.env.BACKEND_URL || "http://127.0.0.1:5000"
+const dummy_consumption = {
+  "total_energy_usage": [
+      {
+          "energy_consumption": 568.0699999999999,
+          "timestamp": "24-04-2024"
+      },
+      {
+          "energy_consumption": 4359.340000000003,
+          "timestamp": "25-04-2024"
+      },
+      {
+          "energy_consumption": 4511.839999999999,
+          "timestamp": "26-04-2024"
+      },
+      {
+          "energy_consumption": 4633.669999999997,
+          "timestamp": "27-04-2024"
+      },
+      {
+          "energy_consumption": 4475.660000000004,
+          "timestamp": "28-04-2024"
+      },
+      {
+          "energy_consumption": 4461.489999999999,
+          "timestamp": "29-04-2024"
+      },
+      {
+          "energy_consumption": 4428.199999999999,
+          "timestamp": "30-04-2024"
+      }
+  ]
+}
+function sliceTimestamps(consumption: Consumption[]): Consumption[] {
+  return consumption.map(item => {
+    if (item.timestamp && item.timestamp.length >= 2) {
+      return { ...item, timestamp: item.timestamp.slice(0, 2) };
+    }
+    return item;
+  });
+}
+
+export async function fetchTotalEnergyConsumptionsByMonth(month: number) {
+  noStore();
+  try {
+    // uncomment kalau mau pake api
+    const response = await fetch(`${backend_url}/api/energy/usage/total?month=${month}`);
+    const data = await response.json();
+    return data.energy_usage_month;
+
+    // comment ini kalo mau pake api
+    // const data = dummy_consumption;
+    // const consumption: Consumption[] = data?.total_energy_usage;
+    // const slicedConsumption = sliceTimestamps(consumption);
+    
+    // return slicedConsumption;
+    // sampe sini
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
+
+export async function fetchAllEnergyConsumptions() {
+  // ditampilin pake tabel
+  noStore();
+  const exampleData = {"energy_usage":[
+    {
+      "area": "100m2",
+      "data_id": 1,
+      "device_id": 1,
+      "device_type": "energy_meter",
+      "energy_consumption": 18.51,
+      "floor": 1,
+      "room_id": 1,
+      "room_name": "Conference Room",
+      "status": "active",
+      "timestamp": "24-04-2024 21:13:40 GMT"
+    },
+    ,
+    {
+        "area": "20m2",
+        "data_id": 8643,
+        "device_id": 3,
+        "device_type": "energy_meter",
+        "energy_consumption": 12.12,
+        "floor": 1,
+        "room_id": 2,
+        "room_name": "Office 101",
+        "status": "active",
+        "timestamp": "24-04-2024 21:13:40 GMT"
+    },
+    {
+        "area": "100m2",
+        "data_id": 4322,
+        "device_id": 2,
+        "device_type": "energy_meter",
+        "energy_consumption": 6.6,
+        "floor": 1,
+        "room_id": 1,
+        "room_name": "Conference Room",
+        "status": "active",
+        "timestamp": "24-04-2024 21:13:40 GMT"
+    },
+
+  ]};
+
+  try {
+    // uncomment kalo mau pake api
+    const response = await fetch(`${backend_url}/api/energy/usage?type=all`);
+    const data = await response.json();
+    return data.energy_usage;
+    // return exampleData.energy_usage;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
+
+export async function fetchEnergyConsumptionsByMonth(month: number) {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/energy/usage?type=month&month=${month}`);
+    const data = await response.json();
+    return data.energy_usage;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
+
+export async function fetchEnergyConsumptionsByDevice(device_id: number) {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/energy/usage?type=device&device_id=${device_id}`);
+    const data = await response.json();
+    return data.rows();
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
+
+export async function fetchEnergyConsumptionsByMonthDevice(month: number, device_id: number) {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/energy/usage?type=month-device&month=${month}&device_id=${device_id}`);
+    const data = await response.json();
+    return data.rows();
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore();
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    console.log('Fetching revenue data...');
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    console.log('Data fetch completed after 3 seconds.');
-
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);

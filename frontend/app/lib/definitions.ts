@@ -31,6 +31,24 @@ export type Revenue = {
   revenue: number;
 };
 
+export type Consumption = {
+  energy_consumption: number;
+  timestamp: string;
+};
+
+export type EnergyUsage = {
+  area: string;
+  data_id: number;
+  device_id: number;
+  device_type: string;
+  energy_consumption: number;
+  floor: number;
+  room_id: number;
+  room_name: string;
+  status: string;
+  timestamp: string;
+}
+
 export type LatestInvoice = {
   id: string;
   name: string;

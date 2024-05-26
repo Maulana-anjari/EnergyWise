@@ -1,4 +1,4 @@
-import { Revenue } from './definitions';
+import { Revenue, Consumption } from './definitions';
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
@@ -30,6 +30,21 @@ export const generateYAxis = (revenue: Revenue[]) => {
 
   for (let i = topLabel; i >= 0; i -= 1000) {
     yAxisLabels.push(`$${i / 1000}K`);
+  }
+
+  return { yAxisLabels, topLabel };
+};
+
+export const generateYAxisConsumption = (consumption: Consumption[]) => {
+  // Calculate the labels we need to display on the y-axis
+  // based on the highest record and in 1000s
+  const yAxisLabels: string[] = [];
+  const highestRecord = Math.max(...consumption.map((item) => item.energy_consumption));
+  const step = 1000; // Step size for the labels
+  const topLabel = Math.ceil(highestRecord / step) * step;
+
+  for (let i = topLabel; i >= 0; i -= step) {
+    yAxisLabels.push(`${i / 1000}kWh`);
   }
 
   return { yAxisLabels, topLabel };
