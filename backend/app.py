@@ -178,6 +178,22 @@ def report():
         return send_file(pdf_path, as_attachment=True)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/api/amount/rooms', methods=['GET'])
+def get_total_of_rooms():
+    try:
+        number_of_rooms = energy.monitor_amount_of_rooms()
+        return jsonify({"number_of_rooms": number_of_rooms})
+    except Exception as e:
+        return jsonify(str(e))
+
+@app.route('/api/amount/devices', methods=['GET'])
+def get_total_of_devices():
+    try:
+        number_of_devices = energy.monitor_amount_of_devices()
+        return jsonify({"number_of_devices": number_of_devices})
+    except Exception as e:
+        return jsonify(str(e))
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('APP_PORT'))

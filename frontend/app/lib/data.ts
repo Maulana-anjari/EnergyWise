@@ -60,7 +60,7 @@ export async function fetchTotalEnergyConsumptionsByMonth(month: number) {
     // uncomment kalau mau pake api
     const response = await fetch(`${backend_url}/api/energy/usage/total?month=${month}`);
     const data = await response.json();
-    return data.energy_usage_month;
+    return data.total_energy_usage;
 
     // comment ini kalo mau pake api
     // const data = dummy_consumption;
@@ -72,6 +72,59 @@ export async function fetchTotalEnergyConsumptionsByMonth(month: number) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
+
+export async function fetchForecast() {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/energy/forecast`);
+    const data = await response.json();
+    return data.forecast;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all energy consumption data.');
+  }
+}
+
+export async function fetchRooms() {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/amount/rooms`);
+    const data = await response.json();
+    return data.number_of_rooms[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch room data.');
+  }
+}
+export async function fetchDevices() {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/amount/devices`);
+    const data = await response.json();
+    return data.number_of_devices[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch room data.');
+  }
+}
+
+export async function fetchReportByMonth(month: number) {
+  noStore();
+  try {
+    const response = await fetch(`${backend_url}/api/energy/report?month=${month}`);
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'energy_report.pdf'); // Set nama file yang akan diunduh
+    document.body.appendChild(link);
+    link.click();
+    return link;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch room data.');
   }
 }
 
@@ -136,7 +189,7 @@ export async function fetchEnergyConsumptionsByMonth(month: number) {
   try {
     const response = await fetch(`${backend_url}/api/energy/usage?type=month&month=${month}`);
     const data = await response.json();
-    return data.energy_usage;
+    return data.energy_usage_month;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch all energy consumption data.');
@@ -148,7 +201,7 @@ export async function fetchEnergyConsumptionsByDevice(device_id: number) {
   try {
     const response = await fetch(`${backend_url}/api/energy/usage?type=device&device_id=${device_id}`);
     const data = await response.json();
-    return data.rows();
+    return data.energy_usage_device;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch all energy consumption data.');

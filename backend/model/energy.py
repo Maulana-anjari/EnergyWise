@@ -210,3 +210,41 @@ def get_total_energy_by_hour():
         cursor.close()
         conn.close()
     return result
+
+def get_rooms():
+    conn = psycopg2.connect(**db_params)
+    cursor = conn.cursor()
+
+    query ="""
+        SELECT COUNT(*) FROM public.room;
+    """
+
+    try:
+        cursor.execute(query)
+        result = cursor.fetchone()
+        conn.commit()
+    except Exception as e:
+        return str(e)
+    finally:
+        cursor.close()
+        conn.close()
+    return result
+
+def get_devices():
+    conn = psycopg2.connect(**db_params)
+    cursor = conn.cursor()
+
+    query ="""
+        SELECT COUNT(*) FROM public.iot_device;
+    """
+
+    try:
+        cursor.execute(query)
+        result = cursor.fetchone()
+        conn.commit()
+    except Exception as e:
+        return str(e)
+    finally:
+        cursor.close()
+        conn.close()
+    return result
