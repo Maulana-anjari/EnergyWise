@@ -50,7 +50,7 @@ def insert_dummy_data():
     #     VALUES (%s, %s, %s, %s)
     # """, iot_devices)
 
-    start_time = datetime.now() - timedelta(days=30)
+    start_time = datetime.now() - timedelta(days=130)
     energy_usage_data = []
 
     for device_id in range(1, 4):

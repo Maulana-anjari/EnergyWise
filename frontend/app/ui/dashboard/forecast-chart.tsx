@@ -1,12 +1,10 @@
 import { generateYAxisConsumption } from '@/app/lib/utils';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchTotalEnergyConsumptionsByMonth } from '@/app/lib/data';
+import { fetchForecast } from '@/app/lib/data';
 import DropdownMonth from '@/app/ui/dashboard/dropdown-month';
 import BarChart from '@/app/ui/dashboard/bar-chart';
-import PrintReport from '@/app/ui/dashboard/print-report';
 import {Consumption} from "@/app/lib/definitions"
-
 function getMonthName(monthNumber: number): string {
   // Array of month names indexed from 0 (January) to 11 (December)
   const monthNames = [
@@ -22,9 +20,8 @@ function getMonthName(monthNumber: number): string {
   // Return the month name (note: monthNumber - 1 to convert to 0-based index)
   return monthNames[monthNumber - 1];
 }
-
-export default async function ConsumptionChart({month}:{month: any}){
-  const consumption: Consumption[] = await fetchTotalEnergyConsumptionsByMonth(month);
+export default async function ForecastChart(){
+  const consumption: Consumption[] = await fetchForecast();
   let data: any
   if (!consumption || consumption.length === 0) {
     data = {
@@ -58,19 +55,12 @@ export default async function ConsumptionChart({month}:{month: any}){
       },
       title: {
         display: true,
-        text: `Energy Consumption in ${getMonthName(month)}`,
+        text: `Energy Consumption Forecasting`,
       },
     },
   };
   return (
     <div className="w-full md:col-span-4">
-      <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Total Energy Consumptions day-by-day
-      </h2>
-      <div className="flex items-between justify-between mb-4">
-          <PrintReport month={month} />
-          <DropdownMonth />
-      </div>
       <div className="rounded-xl bg-gray-50 p-4">
         <BarChart data={data} options={options} />
       </div>

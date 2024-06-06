@@ -12,6 +12,26 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 
+def monitor_amount_of_rooms():
+    try:
+        rooms = energy.get_rooms()
+        if rooms:
+            return rooms
+        else:
+            return "Data not Available"
+    except Exception as e:
+        return str(e)
+    
+def monitor_amount_of_devices():
+    try:
+        devices = energy.get_devices()
+        if devices:
+            return devices
+        else:
+            return "Data not Available"
+    except Exception as e:
+        return str(e)
+    
 def monitor_all_energy_usage():
     try:
         energy_usage = energy.get_energy()
